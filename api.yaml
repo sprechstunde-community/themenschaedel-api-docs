@@ -545,10 +545,6 @@ definitions:
   Topic:
     type: "object"
     properties:
-      user_id: # TODO temporarly until auth is implemented
-        type: "integer"
-        format: "int64"
-        default: 1
       name:
         type: "string"
         default: "Example Topic Name"
@@ -568,10 +564,6 @@ definitions:
   Subtopic:
     type: "object"
     properties:
-      user_id: # TODO temporarly until auth is implemented
-        type: "integer"
-        format: "int64"
-        default: 1
       name:
         type: "string"
         default: "Example Topic Name"
