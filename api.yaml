@@ -224,6 +224,49 @@ paths:
           description: "Invalid username supplied"
         "404":
           description: "User not found"
+  /episodes/{episode}/claim:
+    post:
+      tags:
+        - "episodes"
+      summary: "Claim an episode"
+      description: "This can only be done by the logged in user."
+      operationId: "createEpisodeClaim"
+      parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+        409:
+          description: "Episode is already claimed"
+    delete:
+      tags:
+        - "episodes"
+      summary: "Remove the claim from the episode"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteEpisodeClaim"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that should be unclaimed"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successfully unclaimed the episode"
+        403:
+          description: "Only claiming user can release the claim"
+        409:
+          description: "Episode is not claimed"
+        500:
+          description: "Internal server error while deleting claim"
   /episodes/{episode}/topics:
     get:
       tags:
