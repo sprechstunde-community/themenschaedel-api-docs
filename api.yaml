@@ -1,0 +1,577 @@
+swagger: "2.0"
+info:
+  description: "We are a bunch of people from the \"Sprechstunde\" community, building awesome stuff for the community!"
+  version: "0.1.0"
+  title: "Themenschädel Archiv"
+host: "api.localhost"
+basePath: "/"
+tags:
+- name: "users"
+- name: "episodes"
+schemes:
+- "http"
+- "https"
+paths:
+  /users:
+    get:
+      tags:
+        - "users"
+      summary: "List all users"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+    post:
+      tags:
+      - "users"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /users/{username}:
+    get:
+      tags:
+      - "users"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "users"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "users"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+          
+  /episodes:
+    get:
+      tags:
+        - "episodes"
+      summary: "List all episodes"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+    post:
+      tags:
+      - "episodes"
+      summary: "Create episode"
+      description: "This can only be done by the logged in user."
+      operationId: "createEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Episode"
+      responses:
+        default:
+          description: "successful operation"
+  /episodes/{episode}:
+    get:
+      tags:
+      - "episodes"
+      summary: "Get episode"
+      description: ""
+      operationId: "getEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episode"
+        in: "path"
+        description: "The guid that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "episodes"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episode"
+        in: "path"
+        description: "The guid that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated episode"
+        required: true
+        schema:
+          $ref: "#/definitions/Episode"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "episodes"
+      summary: "Delete episode"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episode"
+        in: "path"
+        description: "The episode that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+  /episodes/{episode}/topics:
+    get:
+      tags:
+        - "episodes"
+      summary: "List all episodes"
+      parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+    post:
+      tags:
+      - "episodes"
+      summary: "Create episode"
+      description: "This can only be done by the logged in user."
+      operationId: "createEpisodeTopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episode"
+        in: "path"
+        description: "The episode that needs to be deleted"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Topic"
+      responses:
+        default:
+          description: "successful operation"
+          
+  /topics:
+    get:
+      tags:
+        - "topics"
+      summary: "List all topics"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+  /topics/{topic}:
+    get:
+      tags:
+      - "topics"
+      summary: "Get topics"
+      description: ""
+      operationId: "getTopics"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "topic"
+        in: "path"
+        description: "The topic that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "topics"
+      summary: "Updated topic"
+      description: "This can only be done by the logged in user."
+      operationId: "updateTopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "topic"
+        in: "path"
+        description: "The topic that needs to be fetched."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated topic object"
+        required: true
+        schema:
+          $ref: "#/definitions/Topic"
+      responses:
+        "400":
+          description: "Invalid topic supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "topics"
+      summary: "Delete episode"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteTopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "topic"
+        in: "path"
+        description: "The episode that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+  /topics/{topic}/subtopics:
+    get:
+      tags:
+        - "topics"
+      summary: "List all subtopics"
+      parameters:
+        - name: "topic"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+    post:
+      tags:
+      - "topics"
+      summary: "Create subtopic"
+      description: "This can only be done by the logged in user."
+      operationId: "createTopicSubtopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "topic"
+        in: "path"
+        description: "The episode that needs to be deleted"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Subtopic"
+      responses:
+        default:
+          description: "successful operation"
+          
+          
+  /subtopics:
+    get:
+      tags:
+        - "subtopics"
+      summary: "List all subtopics"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "successful operation"
+  /subtopics/{subtopic}:
+    get:
+      tags:
+      - "subtopics"
+      summary: "Get subtopic"
+      description: ""
+      operationId: "getSubtopics"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subtopic"
+        in: "path"
+        description: "The subtopic that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "subtopics"
+      summary: "Updated subtopic"
+      description: "This can only be done by the logged in user."
+      operationId: "updateSubtopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subtopic"
+        in: "path"
+        description: "The subtopic that needs to be fetched."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated subtopic object"
+        required: true
+        schema:
+          $ref: "#/definitions/Subtopic"
+      responses:
+        "400":
+          description: "Invalid subtopic supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "subtopics"
+      summary: "Delete episode"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteSubtopic"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subtopic"
+        in: "path"
+        description: "The subtopic that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      email:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+    xml:
+      name: "User"
+  Episode:
+    type: "object"
+    properties:
+      guid:
+        type: "string"
+        format: "uuid"
+      episode_number:
+        type: "integer"
+        format: "int54"
+      title:
+        type: "string"
+      subtitle:
+        type: "string"
+      description:
+        type: "string"
+      image:
+        type: "string"
+        format: "uri"
+        default: "http://example.com/image.png"
+      media_file:
+        type: "string"
+        format: "uri"
+        default: "http://example.com/audio.mp3"
+      duration:
+        type: "integer"
+        format: "int64"
+        default: 3737
+      type:
+        type: "string"
+        default: "full"
+      explicit:
+        type: "boolean"
+        default: false
+      published_at:
+        type: "string"
+        format: "date-time"
+  Topic:
+    type: "object"
+    properties:
+      user_id: # TODO temporarly until auth is implemented
+        type: "integer"
+        format: "int64"
+        default: 1
+      name:
+        type: "string"
+        default: "Example Topic Name"
+      start:
+        type: "integer"
+        format: "int64"
+        default: 135
+      end:
+        type: "integer"
+        format: "int64"
+        default: 204
+      ad:
+        type: "boolean"
+        default: false
+      community_contribution:
+        type: "boolean"
+  Subtopic:
+    type: "object"
+    properties:
+      user_id: # TODO temporarly until auth is implemented
+        type: "integer"
+        format: "int64"
+        default: 1
+      name:
+        type: "string"
+        default: "Example Topic Name"
