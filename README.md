@@ -31,4 +31,4 @@ Some assumptions must be fulfilled, for the documentation to find the server:
 - backend must run on port `80`
 - backend must respond on domain `api.localhost`
 
-If any of these do not match your setup, you have to modify the `./api.yml`-file.
+If any of these do not match your setup, you have to modify the `host`-property in the `api.yaml`-file to represent your specific setup.
