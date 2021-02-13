@@ -21,10 +21,15 @@ Interactive Documentation
 It is possible to interact with an actual api, if you start up the backend on your machine too.
 To do so, follow these steps:
 
-- Clone backend repo: `git clone https://github.com/sprechstunde-community/themenschaedel-backend.git`
-- Start backend server: `docker-compose up -d`
-- Run migrations: `docker-compose exec -it app migrate:fresh`
-- Run database-seeder for dummy data: `docker-compose exec -it app db:seed -v`
+- Clone backend repo:  
+  `git clone https://github.com/sprechstunde-community/themenschaedel-backend.git`
+- Create a `.env`-file containing environment variables like `FEED_URL`. an example file is already included.
+- Start backend server:  
+  `docker-compose up -d`
+- Run migrations:  
+  `docker-compose exec app php artisan migrate:fresh`
+- Run database-seeder for dummy data:  
+  `docker-compose exec app php artisan db:seed -v`
 
 Some assumptions must be fulfilled, for the documentation to find the server:
 
