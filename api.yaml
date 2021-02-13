@@ -3,14 +3,14 @@ info:
   description: "We are a bunch of people from the \"Sprechstunde\" community, building awesome stuff for the community!"
   version: "0.1.0"
   title: "Themenschädel Archiv"
+
 host: "api.localhost"
 basePath: "/"
-tags:
-- name: "users"
-- name: "episodes"
+
 schemes:
 - "http"
 - "https"
+
 paths:
   /users:
     get:
@@ -297,8 +297,8 @@ paths:
   /episodes/{episode}/topics:
     get:
       tags:
-        - "episodes"
-      summary: "List all episodes"
+        - "topics"
+      summary: "List all topics of an episodes"
       parameters:
         - name: "episode"
           in: "path"
@@ -320,7 +320,7 @@ paths:
           description: "successful operation"
     post:
       tags:
-      - "episodes"
+      - "topics"
       summary: "Create episode"
       description: "This can only be done by the logged in user."
       operationId: "createEpisodeTopic"
@@ -430,7 +430,7 @@ paths:
   /topics/{topic}/subtopics:
     get:
       tags:
-        - "topics"
+        - "subtopics"
       summary: "List all subtopics"
       parameters:
         - name: "topic"
@@ -453,7 +453,7 @@ paths:
           description: "successful operation"
     post:
       tags:
-      - "topics"
+      - "subtopics"
       summary: "Create subtopic"
       description: "This can only be done by the logged in user."
       operationId: "createTopicSubtopic"
