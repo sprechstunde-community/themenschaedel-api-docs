@@ -267,6 +267,33 @@ paths:
           description: "Episode is not claimed"
         500:
           description: "Internal server error while deleting claim"
+  /episodes/{episode}/vote:
+    post:
+      tags:
+        - "episodes"
+      summary: "Vote for an episode"
+      description: "This can only be done by the logged in user."
+      operationId: "voteEpisode"
+      parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "direction"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/Vote"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+        400:
+          description: "Bad Request. Direction parameter missing?"
+        500:
+          description: "Internal server error while processing vote"
   /episodes/{episode}/topics:
     get:
       tags:
@@ -610,3 +637,16 @@ definitions:
       name:
         type: "string"
         default: "Example Topic Name"
+  Vote:
+    type: "object"
+    properties:
+      direction:
+        type: "enum"
+        description: "Indicator if voted up, down or revoked"
+        default: 1
+        schema:
+          type: integer
+          enum:
+            - 1
+            - 0
+            - -1
