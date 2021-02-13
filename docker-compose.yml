@@ -1,0 +1,12 @@
+version: '3'
+services:
+  swagger:
+    container_name: themenschaedel-api-docs
+    image: swaggerapi/swagger-ui
+    environment:
+      SWAGGER_JSON: /mnt/api.yaml
+    ports:
+      - '${SWAGGER_PORT:-80}:8080'
+    volumes:
+      - ./:/mnt
+
