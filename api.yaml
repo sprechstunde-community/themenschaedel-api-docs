@@ -16,6 +16,7 @@ tags:
   - name: episodes
   - name: flags
     description: "A flag is bound to an episode and indicates, that something is incorrect and needs to be redone."
+  - name: hosts
   - name: topics
   - name: subtopics
 
@@ -57,6 +58,7 @@ paths:
       responses:
         default:
           description: "successful operation"
+
   /users/{username}:
     get:
       tags:
@@ -65,7 +67,6 @@ paths:
       description: ""
       operationId: "getUserByName"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -164,6 +165,7 @@ paths:
       responses:
         default:
           description: "successful operation"
+
   /episodes/{episode}:
     get:
       tags:
@@ -232,6 +234,7 @@ paths:
           description: "Invalid username supplied"
         "404":
           description: "User not found"
+
   /episodes/{episode}/claim:
     post:
       tags:
@@ -275,6 +278,7 @@ paths:
           description: "Episode is not claimed"
         500:
           description: "Internal server error while deleting claim"
+
   /episodes/{episode}/vote:
     post:
       tags:
@@ -350,6 +354,25 @@ paths:
       responses:
         default:
           description: "successful operation"
+
+  /episodes/{episode}/hosts:
+    get:
+      tags:
+        - "hosts"
+      summary: "List of show hosts appearing on the episode"
+      operationId: "voteEpisode"
+      parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode to look for hosts"
+          required: true
+          type: "string"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+
   /flags:
     get:
       tags:
@@ -438,6 +461,105 @@ paths:
         "404":
           description: "User not found"
 
+  /hosts:
+    get:
+      tags:
+        - "hosts"
+      summary: "List all show hosts"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+        - "application/json"
+      responses:
+        default:
+          description: "Successful operation"
+    post:
+      tags:
+        - "hosts"
+      summary: "Create new show host"
+      operationId: "createHost"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Created host object"
+          required: true
+          schema:
+            $ref: "#/definitions/Host"
+      responses:
+        default:
+          description: "Successful operation"
+
+  /hosts/{host}:
+    get:
+      tags:
+        - "hosts"
+      summary: "Get hosts"
+      operationId: "getHost"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "host"
+          in: "path"
+          description: "The ID of the host, that should be fetched."
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Host"
+        "404":
+          description: "Host not found"
+    put:
+      tags:
+        - "hosts"
+      summary: "Update host"
+      operationId: "updateHost"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "host"
+          in: "path"
+          description: "The ID of the host, that should be updated."
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated host object"
+          required: true
+          schema:
+            $ref: "#/definitions/Host"
+      responses:
+        "200":
+          description: "Successful operation"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+        - "hosts"
+      summary: "Delete show host"
+      operationId: "deleteHost"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "host"
+          in: "path"
+          description: "The ID of the host, that should be deleted."
+          required: true
+          type: "string"
+      responses:
+        "404":
+          description: "Host not found"
+
   /episodes/{episode}/topics:
     get:
       tags:
@@ -505,6 +627,7 @@ paths:
       responses:
         default:
           description: "successful operation"
+
   /topics/{topic}:
     get:
       tags:
@@ -571,6 +694,7 @@ paths:
           description: "Invalid username supplied"
         "404":
           description: "User not found"
+
   /topics/{topic}/subtopics:
     get:
       tags:
@@ -619,7 +743,6 @@ paths:
         default:
           description: "successful operation"
 
-
   /subtopics:
     get:
       tags:
@@ -639,6 +762,7 @@ paths:
       responses:
         default:
           description: "successful operation"
+
   /subtopics/{subtopic}:
     get:
       tags:
@@ -720,6 +844,7 @@ definitions:
         type: "string"
     xml:
       name: "User"
+
   Episode:
     type: "object"
     properties:
@@ -756,12 +881,35 @@ definitions:
       published_at:
         type: "string"
         format: "date-time"
+
   Flag:
     type: "object"
     properties:
       reason:
         type: "string"
         default: "Incorrect topic at 00:45:15"
+
+  Host:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        default: "John Doe"
+        required: true
+      description:
+        type: "string"
+        required: false
+      profile_picture:
+        type: "string"
+        format: "url"
+        default: "https://picsum.photos/512"
+        required: false
+      main:
+        type: "boolean"
+        default: false
+        required: false
+        description: "Indicates whether the host is on (nearly) all shows present"
+
   Topic:
     type: "object"
     properties:
@@ -781,12 +929,14 @@ definitions:
         default: false
       community_contribution:
         type: "boolean"
+
   Subtopic:
     type: "object"
     properties:
       name:
         type: "string"
         default: "Example Topic Name"
+
   Vote:
     type: "object"
     properties:
