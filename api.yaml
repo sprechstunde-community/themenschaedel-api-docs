@@ -309,6 +309,11 @@ paths:
         - "flags"
       summary: "List all flags for an episode"
       parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
         - in: "query"
           name: "page"
           type: "integer"
@@ -331,6 +336,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - name: "episode"
+          in: "path"
+          description: "The episode that needs to be deleted"
+          required: true
+          type: "string"
         - in: "body"
           name: "body"
           description: "Created flag object"
@@ -379,7 +389,7 @@ paths:
           in: "path"
           description: "The ID of the flag, that should be fetched."
           required: true
-          type: "string"
+          type: "integer"
       responses:
         "200":
           description: "Successful operation"
@@ -400,7 +410,7 @@ paths:
           in: "path"
           description: "The ID of the flag, that should be updated."
           required: true
-          type: "string"
+          type: "integer"
         - in: "body"
           name: "body"
           description: "Updated flag object"
@@ -423,7 +433,7 @@ paths:
           in: "path"
           description: "The ID of the flag, that should be deleted."
           required: true
-          type: "string"
+          type: "integer"
       responses:
         "404":
           description: "User not found"
