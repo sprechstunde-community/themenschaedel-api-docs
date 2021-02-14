@@ -11,6 +11,14 @@ schemes:
 - "http"
 - "https"
 
+tags:
+  - name: users
+  - name: episodes
+  - name: flags
+    description: "A flag is bound to an episode and indicates, that something is incorrect and needs to be redone."
+  - name: topics
+  - name: subtopics
+
 paths:
   /users:
     get:
@@ -118,7 +126,7 @@ paths:
           description: "Invalid username supplied"
         "404":
           description: "User not found"
-          
+
   /episodes:
     get:
       tags:
@@ -294,6 +302,132 @@ paths:
           description: "Bad Request. Direction parameter missing?"
         500:
           description: "Internal server error while processing vote"
+
+  /episodes/{episode}/flags:
+    get:
+      tags:
+        - "flags"
+      summary: "List all flags for an episode"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      produces:
+        - "application/json"
+      responses:
+        default:
+          description: "Successful operation"
+    post:
+      tags:
+        - "flags"
+      summary: "Create a new flag for an episode"
+      description: "This can only be done by the logged in user."
+      operationId: "createFlag"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Created flag object"
+          required: true
+          schema:
+            $ref: "#/definitions/Flag"
+      responses:
+        default:
+          description: "successful operation"
+  /flags:
+    get:
+      tags:
+        - "flags"
+      summary: "List all flag objects"
+      description: ""
+      operationId: "getFlags"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          type: "integer"
+          required: false
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Flag"
+        "404":
+          description: "Flag not found"
+  /flags/{flag}:
+    get:
+      tags:
+        - "flags"
+      summary: "Get flag object"
+      description: ""
+      operationId: "getFlag"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "flag"
+          in: "path"
+          description: "The ID of the flag, that should be fetched."
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Flag"
+        "404":
+          description: "Flag not found"
+    put:
+      tags:
+        - "flags"
+      summary: "Update flag"
+      description: "This can only be done by the logged in user."
+      operationId: "updateFlag"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "flag"
+          in: "path"
+          description: "The ID of the flag, that should be updated."
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated flag object"
+          required: true
+          schema:
+            $ref: "#/definitions/Flag"
+      responses:
+        "404":
+          description: "Flag not found"
+    delete:
+      tags:
+        - "flags"
+      summary: "Delete flag"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteFlag"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "flag"
+          in: "path"
+          description: "The ID of the flag, that should be deleted."
+          required: true
+          type: "string"
+      responses:
+        "404":
+          description: "User not found"
+
   /episodes/{episode}/topics:
     get:
       tags:
@@ -341,7 +475,7 @@ paths:
       responses:
         default:
           description: "successful operation"
-          
+
   /topics:
     get:
       tags:
@@ -474,8 +608,8 @@ paths:
       responses:
         default:
           description: "successful operation"
-          
-          
+
+
   /subtopics:
     get:
       tags:
@@ -612,6 +746,12 @@ definitions:
       published_at:
         type: "string"
         format: "date-time"
+  Flag:
+    type: "object"
+    properties:
+      reason:
+        type: "string"
+        default: "Incorrect topic at 00:45:15"
   Topic:
     type: "object"
     properties:
