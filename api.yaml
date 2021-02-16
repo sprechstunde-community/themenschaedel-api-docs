@@ -560,6 +560,50 @@ paths:
         "404":
           description: "Host not found"
 
+  /hosts/{host}/episodes/{episode}:
+    post:
+      tags:
+        - "hosts"
+      summary: "Link a host to an specific episode"
+      operationId: "createHostEpisodeRelation"
+      parameters:
+        - name: "host"
+          in: "path"
+          description: "The host, this relates to"
+          required: true
+          type: "integer"
+        - name: "episode"
+          in: "path"
+          description: "The episode, that should be linked to the show host"
+          required: true
+          type: "string"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+    delete:
+      tags:
+        - "hosts"
+      summary: "Remove the link between the host and the episode"
+      operationId: "deleteHostEpisodeRelation"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "host"
+          in: "path"
+          description: "The host, this relates to"
+          required: true
+          type: "integer"
+        - name: "episode"
+          in: "path"
+          description: "The episode, that should be unlinked from the show host"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successfully unlink the episode from the show host"
+
   /episodes/{episode}/topics:
     get:
       tags:
