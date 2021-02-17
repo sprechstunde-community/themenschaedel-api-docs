@@ -357,7 +357,7 @@ paths:
       tags:
         - "hosts"
       summary: "List of show hosts appearing on the episode"
-      operationId: "voteEpisode"
+      operationId: "getEpisodeHosts"
       parameters:
         - name: "episode"
           in: "path"
@@ -641,7 +641,7 @@ paths:
         type: "integer"
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "New topic object"
         required: true
         schema:
           $ref: "#/definitions/Topic"
