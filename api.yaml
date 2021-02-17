@@ -151,7 +151,6 @@ paths:
       tags:
       - "episodes"
       summary: "Create episode"
-      description: "This can only be done by the logged in user."
       operationId: "createEpisode"
       produces:
       - "application/json"
@@ -178,9 +177,8 @@ paths:
       parameters:
       - name: "episode"
         in: "path"
-        description: "The guid that needs to be fetched. Use user1 for testing. "
         required: true
-        type: "string"
+        type: "integer"
       responses:
         "200":
           description: "successful operation"
@@ -193,8 +191,7 @@ paths:
     put:
       tags:
       - "episodes"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
+      summary: "Update Episode"
       operationId: "updateEpisode"
       produces:
       - "application/json"
@@ -203,7 +200,7 @@ paths:
         in: "path"
         description: "The guid that needs to be fetched. Use user1 for testing. "
         required: true
-        type: "string"
+        type: "integer"
       - in: "body"
         name: "body"
         description: "Updated episode"
@@ -228,7 +225,7 @@ paths:
         in: "path"
         description: "The episode that needs to be deleted"
         required: true
-        type: "string"
+        type: "integer"
       responses:
         "400":
           description: "Invalid username supplied"
@@ -247,7 +244,7 @@ paths:
           in: "path"
           description: "The episode that needs to be deleted"
           required: true
-          type: "string"
+          type: "integer"
       produces:
         - "application/json"
       responses:
@@ -268,7 +265,7 @@ paths:
           in: "path"
           description: "The episode that should be unclaimed"
           required: true
-          type: "string"
+          type: "integer"
       responses:
         200:
           description: "Successfully unclaimed the episode"
@@ -291,7 +288,7 @@ paths:
           in: "path"
           description: "The episode that needs to be deleted"
           required: true
-          type: "string"
+          type: "integer"
         - name: "direction"
           in: "body"
           required: true
@@ -317,7 +314,7 @@ paths:
           in: "path"
           description: "The episode that needs to be deleted"
           required: true
-          type: "string"
+          type: "integer"
         - in: "query"
           name: "page"
           type: "integer"
@@ -344,7 +341,7 @@ paths:
           in: "path"
           description: "The episode that needs to be deleted"
           required: true
-          type: "string"
+          type: "integer"
         - in: "body"
           name: "body"
           description: "Created flag object"
@@ -366,7 +363,7 @@ paths:
           in: "path"
           description: "The episode to look for hosts"
           required: true
-          type: "string"
+          type: "integer"
       produces:
         - "application/json"
       responses:
@@ -576,7 +573,7 @@ paths:
           in: "path"
           description: "The episode, that should be linked to the show host"
           required: true
-          type: "string"
+          type: "integer"
       produces:
         - "application/json"
       responses:
@@ -599,7 +596,7 @@ paths:
           in: "path"
           description: "The episode, that should be unlinked from the show host"
           required: true
-          type: "string"
+          type: "integer"
       responses:
         200:
           description: "Successfully unlink the episode from the show host"
@@ -614,7 +611,7 @@ paths:
           in: "path"
           description: "The episode that needs to be deleted"
           required: true
-          type: "string"
+          type: "integer"
         - in: "query"
           name: "page"
           type: "integer"
@@ -641,7 +638,7 @@ paths:
         in: "path"
         description: "The episode that needs to be deleted"
         required: true
-        type: "string"
+        type: "integer"
       - in: "body"
         name: "body"
         description: "Created user object"
