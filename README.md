@@ -5,35 +5,19 @@ This is the repository containing the api documentation.
 
 To see the documentation, clone this repository and start docker container:
 
-```
+```bash
 docker-compose up -d
 ```
 
-If the port `80` is already in use, you can specify any other port by defining an environment variable:
+If the port `8080` is already in use, you can specify any other port by defining an environment variable:
 
-```
-SWAGGER_PORT=8080 dokcer-compose up -d
+```bash
+SWAGGER_PORT=8787 dokcer-compose up -d
 ```
 
 Interactive Documentation
 -------------------------
 
-It is possible to interact with an actual api, if you start up the backend on your machine too.
-To do so, follow these steps:
-
-- Clone backend repo:  
-  `git clone https://github.com/sprechstunde-community/themenschaedel-backend.git`
-- Create a `.env`-file containing environment variables like `FEED_URL`. an example file is already included.
-- Start backend server:  
-  `docker-compose up -d`
-- Run migrations:  
-  `docker-compose exec app php artisan migrate:fresh`
-- Run database-seeder for dummy data:  
-  `docker-compose exec app php artisan db:seed -v`
-
-Some assumptions must be fulfilled, for the documentation to find the server:
-
-- backend must run on port `80`
-- backend must respond on domain `api.localhost`
-
-If any of these do not match your setup, you have to modify the `host`-property in the `api.yaml`-file to represent your specific setup.
+It is possible to interact with an actual API, if you start up the backend on your local machine too.  
+To do so, you can clone and follow the installation instructions of our 
+[infrastructure repository](https://github.com/sprechstunde-community/themenschaedel-infrastructure.git).
