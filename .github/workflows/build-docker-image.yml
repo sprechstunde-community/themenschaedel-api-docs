@@ -1,0 +1,39 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Log in to docker registry
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+
+      - name: Build docker image with nightly tag
+        run: docker build -t ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:nightly .
+
+      - name: Tag with git tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: >
+          docker tag ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:nightly
+          ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:$( echo ${{ github.ref }} | sed -e 's,.*/\(.*\),\1,')
+
+      - name: Tag as latest
+        # tag image if git tag does not contain dash-char like v1.0.0
+        if: startsWith(github.ref, 'refs/tags/v') && ! contains(github.ref, '-')
+        run: >
+          docker tag ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:nightly
+          ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:latest
+
+      - name: Push docker image
+        run: docker push --all-tags ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}
