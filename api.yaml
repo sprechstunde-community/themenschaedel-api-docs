@@ -1,992 +1,784 @@
-swagger: "2.0"
+openapi: 3.0.3
+
 info:
+  title: "Themenschädel Archive"
   description: "We are a bunch of people from the \"Sprechstunde\" community, building awesome stuff for the community!"
-  version: "0.1.0"
-  title: "Themenschädel Archiv"
+  version: "latest"
 
-host: "api.localhost"
-basePath: "/"
-
-schemes:
-- "http"
-- "https"
+servers:
+  - url: '{protocol}://{domain}/'
+    variables:
+      protocol:
+        enum:
+          - https
+          - http
+        default: https
+      domain:
+        default: api.example.com
+  - url: '{protocol}://{domain}:{port}/'
+    variables:
+      protocol:
+        enum:
+          - https
+          - http
+        default: https
+      domain:
+        default: api.example.com
+      port:
+        default: '443'
 
 tags:
-  - name: users
   - name: episodes
-  - name: flags
-    description: "A flag is bound to an episode and indicates, that something is incorrect and needs to be redone."
-  - name: hosts
   - name: topics
   - name: subtopics
+  - name: hosts
+  - name: flags
+    description: "A flag is bound to an episode and indicates, that something is incorrect and needs to be redone."
+  - name: users
 
 paths:
-  /users:
-    get:
-      tags:
-        - "users"
-      summary: "List all users"
-      parameters:
-        - in: "query"
-          name: "page"
-          type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          type: "integer"
-          required: false
-      produces:
-      - "application/json"
-      responses:
-        default:
-          description: "successful operation"
-    post:
-      tags:
-      - "users"
-      summary: "Create user"
-      description: "This can only be done by the logged in user."
-      operationId: "createUser"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-
-  /users/{username}:
-    get:
-      tags:
-      - "users"
-      summary: "Get user by user name"
-      description: ""
-      operationId: "getUserByName"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
-    put:
-      tags:
-      - "users"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        "400":
-          description: "Invalid user supplied"
-        "404":
-          description: "User not found"
-    delete:
-      tags:
-      - "users"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
-      responses:
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
 
   /episodes:
     get:
       tags:
         - "episodes"
-      summary: "List all episodes"
       parameters:
         - in: "query"
           name: "page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-      - "application/json"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
     post:
       tags:
       - "episodes"
-      summary: "Create episode"
       operationId: "createEpisode"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
+      requestBody:
         required: true
-        schema:
-          $ref: "#/definitions/Episode"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Episode"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /episodes/{episode}:
+    parameters:
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
     get:
       tags:
       - "episodes"
-      summary: "Get episode"
-      description: ""
       operationId: "getEpisode"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "episode"
-        in: "path"
-        required: true
-        type: "integer"
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Episode"
     put:
       tags:
       - "episodes"
-      summary: "Update Episode"
       operationId: "updateEpisode"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "episode"
-        in: "path"
-        description: "The guid that needs to be fetched. Use user1 for testing. "
+      requestBody:
         required: true
-        type: "integer"
-      - in: "body"
-        name: "body"
-        description: "Updated episode"
-        required: true
-        schema:
-          $ref: "#/definitions/Episode"
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/Episode"
       responses:
-        "400":
-          description: "Invalid user supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
     delete:
       tags:
       - "episodes"
       summary: "Delete episode"
-      description: "This can only be done by the logged in user."
       operationId: "deleteEpisode"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "episode"
-        in: "path"
-        description: "The episode that needs to be deleted"
-        required: true
-        type: "integer"
       responses:
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
 
   /episodes/{episode}/claim:
+    parameters:
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
     post:
       tags:
         - "episodes"
       summary: "Claim an episode"
-      description: "This can only be done by the logged in user."
       operationId: "createEpisodeClaim"
       parameters:
         - name: "episode"
           in: "path"
-          description: "The episode that needs to be deleted"
           required: true
-          type: "integer"
-      produces:
-        - "application/json"
+          schema:
+            type: "integer"
       responses:
-        200:
-          description: "successful operation"
+        default:
+          description: "Success"
         409:
-          description: "Episode is already claimed"
+          description: "Already claimed"
     delete:
       tags:
         - "episodes"
       summary: "Remove the claim from the episode"
-      description: "This can only be done by the logged in user."
       operationId: "deleteEpisodeClaim"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "episode"
-          in: "path"
-          description: "The episode that should be unclaimed"
-          required: true
-          type: "integer"
       responses:
-        200:
-          description: "Successfully unclaimed the episode"
+        default:
+          description: "Success"
         403:
-          description: "Only claiming user can release the claim"
-        409:
-          description: "Episode is not claimed"
-        500:
-          description: "Internal server error while deleting claim"
+          description: "Forbidden: Only the user who has claimed the episode can release it again"
 
   /episodes/{episode}/vote:
+    parameters:
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
     post:
       tags:
         - "episodes"
       summary: "Vote for an episode"
-      description: "This can only be done by the logged in user."
       operationId: "voteEpisode"
-      parameters:
-        - name: "episode"
-          in: "path"
-          description: "The episode that needs to be deleted"
+      requestBody:
           required: true
-          type: "integer"
-        - name: "direction"
-          in: "body"
-          required: true
-          schema:
-            $ref: "#/definitions/Vote"
-      produces:
-        - "application/json"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vote"
       responses:
-        200:
-          description: "Successful operation"
+        default:
+          description: "Success"
         400:
-          description: "Bad Request. Direction parameter missing?"
-        500:
-          description: "Internal server error while processing vote"
+          description: "Bad Request; Is the direction parameter missing?"
 
   /episodes/{episode}/flags:
+    parameters:
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
     get:
       tags:
+        - "episodes"
         - "flags"
-      summary: "List all flags for an episode"
       parameters:
-        - name: "episode"
-          in: "path"
-          description: "The episode that needs to be deleted"
-          required: true
-          type: "integer"
-        - in: "query"
-          name: "page"
-          type: "integer"
-          required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-        - "application/json"
       responses:
         default:
-          description: "Successful operation"
+          description: "Success"
     post:
       tags:
+        - "episodes"
         - "flags"
-      summary: "Create a new flag for an episode"
-      description: "This can only be done by the logged in user."
       operationId: "createFlag"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "episode"
-          in: "path"
-          description: "The episode that needs to be deleted"
-          required: true
-          type: "integer"
-        - in: "body"
-          name: "body"
-          description: "Created flag object"
-          required: true
-          schema:
-            $ref: "#/definitions/Flag"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Flag"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /episodes/{episode}/hosts:
     get:
       tags:
+        - "episodes"
         - "hosts"
       summary: "List of show hosts appearing on the episode"
       operationId: "getEpisodeHosts"
       parameters:
         - name: "episode"
           in: "path"
-          description: "The episode to look for hosts"
-          required: true
-          type: "integer"
-      produces:
-        - "application/json"
-      responses:
-        200:
-          description: "Successful operation"
-
-  /flags:
-    get:
-      tags:
-        - "flags"
-      summary: "List all flag objects"
-      description: ""
-      operationId: "getFlags"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "query"
-          name: "page"
-          type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          type: "integer"
-          required: false
-      responses:
-        "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Flag"
-        "404":
-          description: "Flag not found"
-  /flags/{flag}:
-    get:
-      tags:
-        - "flags"
-      summary: "Get flag object"
-      description: ""
-      operationId: "getFlag"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "flag"
-          in: "path"
-          description: "The ID of the flag, that should be fetched."
-          required: true
-          type: "integer"
-      responses:
-        "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Flag"
-        "404":
-          description: "Flag not found"
-    put:
-      tags:
-        - "flags"
-      summary: "Update flag"
-      description: "This can only be done by the logged in user."
-      operationId: "updateFlag"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "flag"
-          in: "path"
-          description: "The ID of the flag, that should be updated."
-          required: true
-          type: "integer"
-        - in: "body"
-          name: "body"
-          description: "Updated flag object"
           required: true
           schema:
-            $ref: "#/definitions/Flag"
-      responses:
-        "404":
-          description: "Flag not found"
-    delete:
-      tags:
-        - "flags"
-      summary: "Delete flag"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteFlag"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "flag"
-          in: "path"
-          description: "The ID of the flag, that should be deleted."
-          required: true
-          type: "integer"
-      responses:
-        "404":
-          description: "User not found"
-
-  /hosts:
-    get:
-      tags:
-        - "hosts"
-      summary: "List all show hosts"
-      parameters:
-        - in: "query"
-          name: "page"
-          type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          type: "integer"
-          required: false
-      produces:
-        - "application/json"
+            type: "integer"
       responses:
         default:
-          description: "Successful operation"
-    post:
-      tags:
-        - "hosts"
-      summary: "Create new show host"
-      operationId: "createHost"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Created host object"
-          required: true
-          schema:
-            $ref: "#/definitions/Host"
-      responses:
-        default:
-          description: "Successful operation"
-
-  /hosts/{host}:
-    get:
-      tags:
-        - "hosts"
-      summary: "Get hosts"
-      operationId: "getHost"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "host"
-          in: "path"
-          description: "The ID of the host, that should be fetched."
-          required: true
-          type: "string"
-      responses:
-        "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Host"
-        "404":
-          description: "Host not found"
-    put:
-      tags:
-        - "hosts"
-      summary: "Update host"
-      operationId: "updateHost"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "host"
-          in: "path"
-          description: "The ID of the host, that should be updated."
-          required: true
-          type: "string"
-        - in: "body"
-          name: "body"
-          description: "Updated host object"
-          required: true
-          schema:
-            $ref: "#/definitions/Host"
-      responses:
-        "200":
-          description: "Successful operation"
-        "404":
-          description: "User not found"
-    delete:
-      tags:
-        - "hosts"
-      summary: "Delete show host"
-      operationId: "deleteHost"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "host"
-          in: "path"
-          description: "The ID of the host, that should be deleted."
-          required: true
-          type: "string"
-      responses:
-        "404":
-          description: "Host not found"
-
-  /hosts/{host}/episodes/{episode}:
-    post:
-      tags:
-        - "hosts"
-      summary: "Link a host to an specific episode"
-      operationId: "createHostEpisodeRelation"
-      parameters:
-        - name: "host"
-          in: "path"
-          description: "The host, this relates to"
-          required: true
-          type: "integer"
-        - name: "episode"
-          in: "path"
-          description: "The episode, that should be linked to the show host"
-          required: true
-          type: "integer"
-      produces:
-        - "application/json"
-      responses:
-        200:
-          description: "Successful operation"
-    delete:
-      tags:
-        - "hosts"
-      summary: "Remove the link between the host and the episode"
-      operationId: "deleteHostEpisodeRelation"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "host"
-          in: "path"
-          description: "The host, this relates to"
-          required: true
-          type: "integer"
-        - name: "episode"
-          in: "path"
-          description: "The episode, that should be unlinked from the show host"
-          required: true
-          type: "integer"
-      responses:
-        200:
-          description: "Successfully unlink the episode from the show host"
+          description: "Success"
 
   /episodes/{episode}/topics:
+    parameters:
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
     get:
       tags:
+        - "episodes"
         - "topics"
-      summary: "List all topics of an episodes"
       parameters:
-        - name: "episode"
-          in: "path"
-          description: "The episode that needs to be deleted"
-          required: true
-          type: "integer"
         - in: "query"
           name: "page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-      - "application/json"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
     post:
       tags:
-      - "topics"
-      summary: "Create episode"
-      description: "This can only be done by the logged in user."
+        - "episodes"
+        - "topics"
       operationId: "createEpisodeTopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "episode"
-        in: "path"
-        description: "The episode that needs to be deleted"
+      requestBody:
         required: true
-        type: "integer"
-      - in: "body"
-        name: "body"
-        description: "New topic object"
-        required: true
-        schema:
-          $ref: "#/definitions/Topic"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Topic"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /topics:
     get:
       tags:
         - "topics"
-      summary: "List all topics"
       parameters:
         - in: "query"
           name: "page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-      - "application/json"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /topics/{topic}:
+    parameters:
+    - name: "topic"
+      in: "path"
+      required: true
+      schema:
+        type: "string"
     get:
       tags:
       - "topics"
-      summary: "Get topics"
-      description: ""
       operationId: "getTopics"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "topic"
-        in: "path"
-        description: "The topic that needs to be fetched."
-        required: true
-        type: "string"
       responses:
-        "200":
-          description: "successful operation"
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
     put:
       tags:
       - "topics"
-      summary: "Updated topic"
-      description: "This can only be done by the logged in user."
       operationId: "updateTopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "topic"
-        in: "path"
-        description: "The topic that needs to be fetched."
+      requestBody:
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated topic object"
-        required: true
-        schema:
-          $ref: "#/definitions/Topic"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Topic"
       responses:
-        "400":
-          description: "Invalid topic supplied"
-        "404":
-          description: "User not found"
+        404:
+          description: "Not found"
     delete:
       tags:
       - "topics"
-      summary: "Delete episode"
-      description: "This can only be done by the logged in user."
       operationId: "deleteTopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "topic"
-        in: "path"
-        description: "The episode that needs to be deleted"
-        required: true
-        type: "string"
       responses:
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
 
   /topics/{topic}/subtopics:
+    parameters:
+      - name: "topic"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
     get:
       tags:
+        - "topics"
         - "subtopics"
-      summary: "List all subtopics"
       parameters:
-        - name: "topic"
-          in: "path"
-          description: "The episode that needs to be deleted"
-          required: true
-          type: "string"
         - in: "query"
           name: "page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-      - "application/json"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
     post:
       tags:
-      - "subtopics"
-      summary: "Create subtopic"
-      description: "This can only be done by the logged in user."
+        - "topics"
+        - "subtopics"
       operationId: "createTopicSubtopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "topic"
-        in: "path"
-        description: "The episode that needs to be deleted"
+      requestBody:
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/Subtopic"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subtopic"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /subtopics:
     get:
       tags:
         - "subtopics"
-      summary: "List all subtopics"
       parameters:
         - in: "query"
           name: "page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
         - in: "query"
           name: "per_page"
-          type: "integer"
+          schema:
+            type: "integer"
           required: false
-      produces:
-      - "application/json"
       responses:
         default:
-          description: "successful operation"
+          description: "Success"
 
   /subtopics/{subtopic}:
+    parameters:
+    - name: "subtopic"
+      in: "path"
+      required: true
+      schema:
+        type: "string"
     get:
       tags:
       - "subtopics"
-      summary: "Get subtopic"
-      description: ""
       operationId: "getSubtopics"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subtopic"
-        in: "path"
-        description: "The subtopic that needs to be fetched."
-        required: true
-        type: "string"
       responses:
-        "200":
-          description: "successful operation"
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
     put:
       tags:
       - "subtopics"
-      summary: "Updated subtopic"
-      description: "This can only be done by the logged in user."
       operationId: "updateSubtopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subtopic"
-        in: "path"
-        description: "The subtopic that needs to be fetched."
+      requestBody:
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated subtopic object"
-        required: true
-        schema:
-          $ref: "#/definitions/Subtopic"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subtopic"
       responses:
-        "400":
-          description: "Invalid subtopic supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
     delete:
       tags:
       - "subtopics"
-      summary: "Delete episode"
-      description: "This can only be done by the logged in user."
       operationId: "deleteSubtopic"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subtopic"
-        in: "path"
-        description: "The subtopic that needs to be deleted"
-        required: true
-        type: "string"
       responses:
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
 
-definitions:
-  User:
-    type: "object"
-    properties:
-      username:
-        type: "string"
-      email:
-        type: "string"
-      name:
-        type: "string"
-      description:
-        type: "string"
-    xml:
-      name: "User"
+  /flags:
+    get:
+      tags:
+        - "flags"
+      operationId: "getFlags"
+      parameters:
+        - in: "query"
+          name: "page"
+          schema:
+            type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          schema:
+            type: "integer"
+          required: false
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
 
-  Episode:
-    type: "object"
-    properties:
-      guid:
-        type: "string"
-        format: "uuid"
-      episode_number:
-        type: "integer"
-        format: "int54"
-      title:
-        type: "string"
-      subtitle:
-        type: "string"
-      description:
-        type: "string"
-      image:
-        type: "string"
-        format: "uri"
-        default: "http://example.com/image.png"
-      media_file:
-        type: "string"
-        format: "uri"
-        default: "http://example.com/audio.mp3"
-      duration:
-        type: "integer"
-        format: "int64"
-        default: 3737
-      type:
-        type: "string"
-        default: "full"
-      explicit:
-        type: "boolean"
-        default: false
-      published_at:
-        type: "string"
-        format: "date-time"
-
-  Flag:
-    type: "object"
-    properties:
-      reason:
-        type: "string"
-        default: "Incorrect topic at 00:45:15"
-
-  Host:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-        default: "John Doe"
+  /hosts:
+    get:
+      tags:
+        - "hosts"
+      parameters:
+        - in: "query"
+          name: "page"
+          schema:
+            type: "integer"
+          required: false
+        - in: "query"
+          name: "per_page"
+          schema:
+            type: "integer"
+          required: false
+      responses:
+        default:
+          description: "Success"
+    post:
+      tags:
+        - "hosts"
+      operationId: "createHost"
+      requestBody:
         required: true
-      description:
-        type: "string"
-        required: false
-      profile_picture:
-        type: "string"
-        format: "url"
-        default: "https://picsum.photos/512"
-        required: false
-      main:
-        type: "boolean"
-        default: false
-        required: false
-        description: "Indicates whether the host is on (nearly) all shows present"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Host"
+      responses:
+        default:
+          description: "Success"
 
-  Topic:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-        default: "Example Topic Name"
-      start:
-        type: "integer"
-        format: "int64"
-        default: 135
-      end:
-        type: "integer"
-        format: "int64"
-        default: 204
-      ad:
-        type: "boolean"
-        default: false
-      community_contribution:
-        type: "boolean"
-
-  Subtopic:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-        default: "Example Topic Name"
-
-  Vote:
-    type: "object"
-    properties:
-      direction:
-        type: "enum"
-        description: "Indicator if voted up, down or revoked"
-        default: 1
+  /hosts/{host}:
+    parameters:
+      - name: "host"
+        in: "path"
+        required: true
         schema:
-          type: integer
+          type: "string"
+    get:
+      tags:
+        - "hosts"
+      operationId: "getHost"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+    put:
+      tags:
+        - "hosts"
+      operationId: "updateHost"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Host"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+    delete:
+      tags:
+        - "hosts"
+      operationId: "deleteHost"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+
+  /hosts/{host}/episodes/{episode}:
+    parameters:
+      - name: "host"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      - name: "episode"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+    post:
+      tags:
+        - "episodes"
+        - "hosts"
+      summary: "Link a host to an specific episode"
+      operationId: "createHostEpisodeRelation"
+      responses:
+        default:
+          description: "Success"
+    delete:
+      tags:
+        - "episodes"
+        - "hosts"
+      summary: "Remove the link between the host and the episode"
+      operationId: "deleteHostEpisodeRelation"
+      responses:
+        default:
+          description: "Success"
+
+
+  /flags/{flag}:
+    parameters:
+      - name: "flag"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+    get:
+      tags:
+        - "flags"
+      operationId: "getFlag"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+    put:
+      tags:
+        - "flags"
+      operationId: "updateFlag"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Flag"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+    delete:
+      tags:
+        - "flags"
+      operationId: "deleteFlag"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+
+  /users:
+    get:
+      tags:
+        - "users"
+      parameters:
+        - in: "query"
+          name: "page"
+          schema:
+            type: "integer"
+
+          required: false
+        - in: "query"
+          name: "per_page"
+          schema:
+            type: "integer"
+          required: false
+      responses:
+        default:
+          description: "Success"
+    post:
+      tags:
+        - "users"
+      operationId: "createUser"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        default:
+          description: "Success"
+
+  /users/{username}:
+    parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+    get:
+      tags:
+        - "users"
+      operationId: "getUserByName"
+      responses:
+        default:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: "Not found"
+    put:
+      tags:
+        - "users"
+      operationId: "updateUser"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+
+    delete:
+      tags:
+        - "users"
+      operationId: "deleteUser"
+      responses:
+        default:
+          description: "Success"
+        404:
+          description: "Not found"
+
+
+components:
+  schemas:
+    User:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        email:
+          type: "string"
+        name:
+          type: "string"
+        description:
+          type: "string"
+
+    Episode:
+      type: "object"
+      properties:
+        guid:
+          type: "string"
+          format: "uuid"
+        episode_number:
+          type: "integer"
+          format: "int54"
+        title:
+          type: "string"
+        subtitle:
+          type: "string"
+        description:
+          type: "string"
+        image:
+          type: "string"
+          format: "uri"
+          default: "https://example.com/image.png"
+        media_file:
+          type: "string"
+          format: "uri"
+          default: "https://example.com/audio.mp3"
+        duration:
+          type: "integer"
+          format: "int64"
+          default: 3737
+        type:
+          type: "string"
+          default: "full"
+        explicit:
+          type: "boolean"
+          default: false
+        published_at:
+          type: "string"
+          format: "date-time"
+
+    Flag:
+      type: "object"
+      properties:
+        reason:
+          type: "string"
+          default: "Incorrect topic at 00:45:15"
+
+    Host:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          default: "John Doe"
+          required: true
+        description:
+          type: "string"
+          required: false
+        profile_picture:
+          type: "string"
+          format: "url"
+          default: "https://picsum.photos/512"
+          required: false
+        main:
+          type: "boolean"
+          default: false
+          required: false
+          description: "Indicates whether the host is on (nearly) all shows present"
+
+    Topic:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          default: "Example Topic Name"
+        start:
+          type: "integer"
+          format: "int64"
+          default: 135
+        end:
+          type: "integer"
+          format: "int64"
+          default: 204
+        ad:
+          type: "boolean"
+          default: false
+        community_contribution:
+          type: "boolean"
+
+    Subtopic:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          default: "Example Topic Name"
+
+    Vote:
+      type: "object"
+      properties:
+        direction:
+          description: "Indicator if voted up, down or revoked"
+          default: 1
+          type: "integer"
           enum:
             - 1
             - 0
