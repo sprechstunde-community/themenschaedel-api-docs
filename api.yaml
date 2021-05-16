@@ -646,7 +646,7 @@ components:
           format: "uuid"
         episode_number:
           type: "integer"
-          format: "int54"
+          format: "int64"
         title:
           type: "string"
         subtitle:
@@ -688,19 +688,15 @@ components:
         name:
           type: "string"
           default: "John Doe"
-          required: true
         description:
           type: "string"
-          required: false
         profile_picture:
           type: "string"
           format: "url"
           default: "https://picsum.photos/512"
-          required: false
         main:
           type: "boolean"
           default: false
-          required: false
           description: "Indicates whether the host is on (nearly) all shows present"
 
     Topic:
