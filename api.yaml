@@ -28,6 +28,7 @@ servers:
         default: '443'
 
 tags:
+  - name: search
   - name: episodes
   - name: topics
   - name: subtopics
@@ -38,21 +39,38 @@ tags:
 
 paths:
 
+  /search/{entity}:
+    parameters:
+      - name: "entity"
+        in: "path"
+        required: true
+        schema:
+          type: string
+          enum:
+            - "episodes"
+            - "topics"
+            - "subtopics"
+      - name: "q"
+        description: "Search Query"
+        in: "query"
+        schema:
+          type: string
+      - $ref: "#/components/parameters/Pagination"
+      - $ref: "#/components/parameters/PerPage"
+    get:
+      tags:
+        - "search"
+      responses:
+        default:
+          description: "Success"
+
   /episodes:
     get:
       tags:
         - "episodes"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -180,11 +198,8 @@ paths:
         - "episodes"
         - "flags"
       parameters:
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -232,16 +247,8 @@ paths:
         - "episodes"
         - "topics"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -265,16 +272,8 @@ paths:
       tags:
         - "topics"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -330,16 +329,8 @@ paths:
         - "topics"
         - "subtopics"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -363,16 +354,8 @@ paths:
       tags:
         - "subtopics"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -424,16 +407,8 @@ paths:
         - "flags"
       operationId: "getFlags"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -445,16 +420,8 @@ paths:
       tags:
         - "hosts"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -591,17 +558,8 @@ paths:
       tags:
         - "users"
       parameters:
-        - in: "query"
-          name: "page"
-          schema:
-            type: "integer"
-
-          required: false
-        - in: "query"
-          name: "per_page"
-          schema:
-            type: "integer"
-          required: false
+        - $ref: "#/components/parameters/Pagination"
+        - $ref: "#/components/parameters/PerPage"
       responses:
         default:
           description: "Success"
@@ -783,3 +741,24 @@ components:
             - 1
             - 0
             - -1
+
+  parameters:
+
+    Pagination:
+      in: query
+      name: page
+      required: false
+      description: "Page number used to iterate through all items"
+      schema:
+        type: integer
+        minimum: 1
+
+
+    PerPage:
+      in: query
+      name: per_page
+      required: false
+      description: "Amount of items to display per request"
+      schema:
+        type: integer
+        minimum: 1
