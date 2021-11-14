@@ -1,7 +1,14 @@
+DEPRECATED
+==========
+
+Documentation is now part of the backend codebase diretly. See
+[Backend Docs](https://github.com/sprechstunde-community/themenschaedel-backend#api-documentation) for more information.
+
 Themenschaedel API Documentation
 ================================
 
-This is the repository containing the api documentation.
+
+This was the repository containing the api documentation.
 
 To see the documentation, clone this repository and start docker container:
 
